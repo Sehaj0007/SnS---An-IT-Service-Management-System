@@ -20,3 +20,5 @@ target/
 .classpath
 .project
 .DS_Store
+
+.metadata/
