@@ -60,7 +60,6 @@ public class OrderService {
         return pcOrderRepository.save(order);
     }
 
-    // This is the method that was missing from your file
     public List<OrderDto> getOrdersForUser(String userEmail) {
         User user = userRepository.findByEmail(userEmail)
                 .orElseThrow(() -> new RuntimeException("User not found for order history"));
@@ -69,6 +68,16 @@ public class OrderService {
 
         return orders.stream()
                 .map(OrderDto::new)
+                .collect(Collectors.toList());
+    }
+    
+    // --- NEW METHOD FOR ADMIN DASHBOARD ---
+    // This method is added safely and does not interfere with the existing code.
+    public List<OrderDto> getAllOrders() {
+        // We find all orders and sort them by the newest first.
+        List<PcOrder> allOrders = pcOrderRepository.findAllByOrderByOrderDateDesc();
+        return allOrders.stream()
+                .map(OrderDto::new) // Convert each PcOrder entity to an OrderDto
                 .collect(Collectors.toList());
     }
 }

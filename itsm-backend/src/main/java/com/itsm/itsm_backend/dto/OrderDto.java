@@ -15,6 +15,7 @@ public class OrderDto {
     private String orderStatus;
     private BigDecimal totalPrice;
     private List<OrderItemDto> items;
+    private String userEmail; // <-- 1. ADD THIS NEW FIELD
 
     public OrderDto(PcOrder order) {
         this.orderId = order.getOrderId();
@@ -24,5 +25,7 @@ public class OrderDto {
         this.items = order.getOrderItems().stream()
                 .map(OrderItemDto::new)
                 .collect(Collectors.toList());
+        this.userEmail = order.getUser().getEmail(); // <-- 2. SET THE NEW FIELD
     }
 }
+

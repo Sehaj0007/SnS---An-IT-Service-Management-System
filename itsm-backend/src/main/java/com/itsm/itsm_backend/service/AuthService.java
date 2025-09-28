@@ -55,6 +55,5 @@ public class AuthService {
             .orElseThrow(() -> new IllegalStateException("User not found after authentication"));
         
         var jwtToken = jwtService.generateToken(user);
-        return new AuthResponse(jwtToken);
-    }
+        return new AuthResponse(jwtToken, user.getEmail(), user.getAuthorities());    }
 }

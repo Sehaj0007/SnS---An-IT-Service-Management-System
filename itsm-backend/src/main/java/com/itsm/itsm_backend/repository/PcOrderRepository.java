@@ -11,5 +11,9 @@ import java.util.List;
 public interface PcOrderRepository extends JpaRepository<PcOrder, Long> {
     // This method finds all orders for a given user, ordered by the most recent first.
     List<PcOrder> findByUserOrderByOrderDateDesc(User user);
+
+    // --- NEW METHOD FOR ADMIN DASHBOARD ---
+    // This method finds all orders from all users and sorts them by the newest first.
+    List<PcOrder> findAllByOrderByOrderDateDesc();
 }
 
