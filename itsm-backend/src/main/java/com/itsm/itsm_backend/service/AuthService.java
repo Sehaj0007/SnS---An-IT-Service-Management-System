@@ -30,7 +30,7 @@ public class AuthService {
         user.setFullName(request.getFullName());
         user.setEmail(request.getEmail());
         user.setPasswordHash(passwordEncoder.encode(request.getPassword()));
-        user.setAuthProvider("local"); // Or another provider if you implement social login
+        user.setAuthProvider("local"); 
 
         userRepository.save(user);
     }
@@ -44,16 +44,21 @@ public class AuthService {
                 )
             );
         } catch (AuthenticationException e) {
-            // This is our new, detailed logging!
             System.err.println("Authentication failed for user " + request.getEmail() + ": " + e.getMessage());
-            e.printStackTrace(); // This will print the full error stack trace
-            throw e; // Re-throw the exception to be caught by the controller
+            e.printStackTrace();
+            throw e; 
         }
 
         // If authentication is successful, proceed to generate token
         var user = userRepository.findByEmail(request.getEmail())
             .orElseThrow(() -> new IllegalStateException("User not found after authentication"));
         
+        // The jwtService now creates a token that includes the user's roles
         var jwtToken = jwtService.generateToken(user);
-        return new AuthResponse(jwtToken, user.getEmail(), user.getAuthorities());    }
+
+        // --- THE FIX IS HERE ---
+        // We now use the new, detailed constructor from AuthResponse to include the roles.
+        return new AuthResponse(jwtToken, user.getEmail(), user.getAuthorities());
+    }
 }
+
