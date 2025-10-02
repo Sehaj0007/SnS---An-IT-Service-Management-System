@@ -1,16 +1,18 @@
 package com.itsm.itsm_backend.service;
 
-import com.itsm.itsm_backend.dto.AuthResponse;
-import com.itsm.itsm_backend.dto.LoginRequest;
-import com.itsm.itsm_backend.dto.RegisterRequest;
-import com.itsm.itsm_backend.entity.User;
-import com.itsm.itsm_backend.repository.UserRepository;
-import lombok.RequiredArgsConstructor;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.AuthenticationException;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
+
+import com.itsm.itsm_backend.dto.AuthResponse;
+import com.itsm.itsm_backend.dto.LoginRequest;
+import com.itsm.itsm_backend.dto.RegisterRequest;
+import com.itsm.itsm_backend.entity.User;
+import com.itsm.itsm_backend.repository.UserRepository;
+
+import lombok.RequiredArgsConstructor;
 
 @Service
 @RequiredArgsConstructor
@@ -30,7 +32,7 @@ public class AuthService {
         user.setFullName(request.getFullName());
         user.setEmail(request.getEmail());
         user.setPasswordHash(passwordEncoder.encode(request.getPassword()));
-        user.setAuthProvider("local"); 
+        user.setAuthProvider("local");
 
         userRepository.save(user);
     }
@@ -46,13 +48,13 @@ public class AuthService {
         } catch (AuthenticationException e) {
             System.err.println("Authentication failed for user " + request.getEmail() + ": " + e.getMessage());
             e.printStackTrace();
-            throw e; 
+            throw e;
         }
 
         // If authentication is successful, proceed to generate token
         var user = userRepository.findByEmail(request.getEmail())
             .orElseThrow(() -> new IllegalStateException("User not found after authentication"));
-        
+
         // The jwtService now creates a token that includes the user's roles
         var jwtToken = jwtService.generateToken(user);
 

@@ -1,10 +1,7 @@
 package com.itsm.itsm_backend.controller;
 
-import com.itsm.itsm_backend.dto.AuthResponse;
-import com.itsm.itsm_backend.dto.LoginRequest;
-import com.itsm.itsm_backend.dto.RegisterRequest;
-import com.itsm.itsm_backend.service.AuthService;
-import lombok.RequiredArgsConstructor;
+import java.util.Map;
+
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.AuthenticationException;
@@ -14,7 +11,12 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
-import java.util.Map;
+import com.itsm.itsm_backend.dto.AuthResponse;
+import com.itsm.itsm_backend.dto.LoginRequest;
+import com.itsm.itsm_backend.dto.RegisterRequest;
+import com.itsm.itsm_backend.service.AuthService;
+
+import lombok.RequiredArgsConstructor;
 
 @RestController
 @RequestMapping("/api/auth")
