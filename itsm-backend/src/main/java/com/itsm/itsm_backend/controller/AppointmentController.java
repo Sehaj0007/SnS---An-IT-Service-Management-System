@@ -1,11 +1,17 @@
 package com.itsm.itsm_backend.controller;
 
+import org.springframework.http.ResponseEntity;
+import org.springframework.web.bind.annotation.CrossOrigin;
+import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestBody;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RestController;
+
 import com.itsm.itsm_backend.dto.AppointmentRequest;
 import com.itsm.itsm_backend.entity.Appointment;
 import com.itsm.itsm_backend.service.AppointmentService;
+
 import lombok.RequiredArgsConstructor;
-import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.*;
 
 @RestController
 @RequestMapping("/api/appointments")

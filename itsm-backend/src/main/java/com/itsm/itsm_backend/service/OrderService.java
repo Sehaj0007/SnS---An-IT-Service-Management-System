@@ -1,5 +1,13 @@
 package com.itsm.itsm_backend.service;
 
+import java.math.BigDecimal;
+import java.time.LocalDateTime;
+import java.util.List;
+import java.util.stream.Collectors;
+
+import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
+
 import com.itsm.itsm_backend.dto.OrderDto;
 import com.itsm.itsm_backend.dto.OrderRequest;
 import com.itsm.itsm_backend.entity.Component;
@@ -9,14 +17,8 @@ import com.itsm.itsm_backend.entity.User;
 import com.itsm.itsm_backend.repository.ComponentRepository;
 import com.itsm.itsm_backend.repository.PcOrderRepository;
 import com.itsm.itsm_backend.repository.UserRepository;
-import lombok.RequiredArgsConstructor;
-import org.springframework.stereotype.Service;
-import org.springframework.transaction.annotation.Transactional;
 
-import java.math.BigDecimal;
-import java.time.LocalDateTime;
-import java.util.List;
-import java.util.stream.Collectors;
+import lombok.RequiredArgsConstructor;
 
 @Service
 @RequiredArgsConstructor
@@ -60,7 +62,6 @@ public class OrderService {
         return pcOrderRepository.save(order);
     }
 
-    // This is the method that was missing from your file
     public List<OrderDto> getOrdersForUser(String userEmail) {
         User user = userRepository.findByEmail(userEmail)
                 .orElseThrow(() -> new RuntimeException("User not found for order history"));
@@ -69,6 +70,16 @@ public class OrderService {
 
         return orders.stream()
                 .map(OrderDto::new)
+                .collect(Collectors.toList());
+    }
+
+    // --- NEW METHOD FOR ADMIN DASHBOARD ---
+    // This method is added safely and does not interfere with the existing code.
+    public List<OrderDto> getAllOrders() {
+        // We find all orders and sort them by the newest first.
+        List<PcOrder> allOrders = pcOrderRepository.findAllByOrderByOrderDateDesc();
+        return allOrders.stream()
+                .map(OrderDto::new) // Convert each PcOrder entity to an OrderDto
                 .collect(Collectors.toList());
     }
 }

@@ -7,6 +7,9 @@ const AppNavbar = () => {
     const { user, logout } = useAuth();
     const [showLogoutModal, setShowLogoutModal] = useState(false);
 
+    // 1. This is the new logic to check if the user is an admin
+    const isAdmin = user && user.roles && user.roles.includes('ROLE_ADMIN');
+
     const handleLogout = () => {
         logout();
         setShowLogoutModal(false);
@@ -35,6 +38,12 @@ const AppNavbar = () => {
                         <Nav>
                             {user ? (
                                 <NavDropdown title={user.email} id="basic-nav-dropdown" align="end">
+                                    {/* 2. We conditionally render the Admin link here */}
+                                    {isAdmin && (
+                                        <LinkContainer to="/admin-dashboard">
+                                            <NavDropdown.Item>Admin Dashboard</NavDropdown.Item>
+                                        </LinkContainer>
+                                    )}
                                     <LinkContainer to="/my-orders">
                                         <NavDropdown.Item>My Orders</NavDropdown.Item>
                                     </LinkContainer>
@@ -53,7 +62,7 @@ const AppNavbar = () => {
                 </Container>
             </Navbar>
 
-            {/* Logout Confirmation Modal */}
+            {/* Your existing Logout Confirmation Modal remains unchanged */}
             <Modal show={showLogoutModal} onHide={() => setShowLogoutModal(false)} centered>
                 <Modal.Header closeButton>
                     <Modal.Title>Confirm Logout</Modal.Title>

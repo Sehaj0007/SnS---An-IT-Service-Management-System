@@ -1,8 +1,9 @@
 package com.itsm.itsm_backend.repository;
 
-import com.itsm.itsm_backend.entity.Appointment;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.stereotype.Repository;
+
+import com.itsm.itsm_backend.entity.Appointment;
 
 /**
  * Repository interface for Appointment entity.

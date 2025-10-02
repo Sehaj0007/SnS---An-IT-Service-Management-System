@@ -1,11 +1,13 @@
 package com.itsm.itsm_backend.service;
 
+import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
+
 import com.itsm.itsm_backend.dto.AppointmentRequest;
 import com.itsm.itsm_backend.entity.Appointment;
 import com.itsm.itsm_backend.repository.AppointmentRepository;
+
 import lombok.RequiredArgsConstructor;
-import org.springframework.stereotype.Service;
-import org.springframework.transaction.annotation.Transactional;
 
 @Service
 @RequiredArgsConstructor
@@ -23,7 +25,7 @@ public class AppointmentService {
         appointment.setPreferredDate(request.getPreferredDate());
         appointment.setPreferredTime(request.getPreferredTime());
         appointment.setIssueDescription(request.getIssueDescription());
-        
+
         // The @PrePersist annotation in the Appointment entity will handle
         // setting the createdAt and default status fields.
 

@@ -8,12 +8,24 @@ import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
 
+// 1. Add this import
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
+import jakarta.persistence.EnumType;
+import jakarta.persistence.Enumerated;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
+import jakarta.persistence.PrePersist;
 import jakarta.persistence.Table;
+
+// --- NEW ENUM ---
+// This defines the possible roles a user can have.
+enum Role {
+    USER,
+    ADMIN
+}
+// ---
 
 @Entity
 @Table(name = "users")
@@ -36,17 +48,39 @@ public class User implements UserDetails {
     @Column(name = "auth_provider", nullable = false)
     private String authProvider;
 
+    // --- NEW FIELD ---
+    // This connects to the new 'role' column in your database.
+    @Enumerated(EnumType.STRING)
+    @Column(name = "role") // Making it nullable temporarily to avoid issues with existing data
+    private Role role;
+    // ---
+
     @Column(name = "created_at", updatable = false, insertable = false)
     private Timestamp createdAt;
 
+    // --- NEW METHOD ---
+    // This is a safety feature. It ensures that any new user created
+    // through your existing registration page will automatically be assigned the 'USER' role.
+    @PrePersist
+    protected void onCreate() {
+        if (this.role == null) {
+            this.role = Role.USER;
+        }
+    }
+    // ---
+
     // --- UserDetails Methods ---
-    // These methods are required by Spring Security
 
     @Override
     public Collection<? extends GrantedAuthority> getAuthorities() {
-        // For now, we'll give every user a simple 'USER' role.
-        // We can make this more complex later if needed.
-        return List.of(new SimpleGrantedAuthority("ROLE_USER"));
+        // --- UPDATED ---
+        // Instead of being hardcoded, this now reads the actual role from the database
+        // and provides it to Spring Security (e.g., "ROLE_ADMIN").
+        if (this.role == null) {
+            return List.of(new SimpleGrantedAuthority("ROLE_USER"));
+        }
+        return List.of(new SimpleGrantedAuthority("ROLE_" + this.role.name()));
+        // ---
     }
 
     @Override
@@ -56,28 +90,27 @@ public class User implements UserDetails {
 
     @Override
     public String getUsername() {
-        // We are using the email as the username for authentication.
         return this.email;
     }
 
     @Override
     public boolean isAccountNonExpired() {
-        return true; // Account never expires
+        return true;
     }
 
     @Override
     public boolean isAccountNonLocked() {
-        return true; // Account is never locked
+        return true;
     }
 
     @Override
     public boolean isCredentialsNonExpired() {
-        return true; // Credentials never expire
+        return true;
     }
 
     @Override
     public boolean isEnabled() {
-        return true; // Account is always enabled
+        return true;
     }
 
     // --- Getters and Setters ---
@@ -93,4 +126,10 @@ public class User implements UserDetails {
     public void setAuthProvider(String authProvider) { this.authProvider = authProvider; }
     public Timestamp getCreatedAt() { return createdAt; }
     public void setCreatedAt(Timestamp createdAt) { this.createdAt = createdAt; }
+
+    // --- NEW GETTER/SETTER ---
+    public Role getRole() { return role; }
+    public void setRole(Role role) { this.role = role; }
+    // ---
 }
+

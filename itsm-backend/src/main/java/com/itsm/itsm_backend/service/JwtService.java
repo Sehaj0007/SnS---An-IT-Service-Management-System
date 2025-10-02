@@ -1,19 +1,22 @@
 package com.itsm.itsm_backend.service;
 
-import io.jsonwebtoken.Claims;
-import io.jsonwebtoken.Jwts;
-import io.jsonwebtoken.SignatureAlgorithm;
-import io.jsonwebtoken.io.Decoders;
-import io.jsonwebtoken.security.Keys;
-import org.springframework.beans.factory.annotation.Value;
-import org.springframework.security.core.userdetails.UserDetails;
-import org.springframework.stereotype.Service;
-
 import java.security.Key;
 import java.util.Date;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.function.Function;
+import java.util.stream.Collectors; // 2. Import this helper
+
+import org.springframework.beans.factory.annotation.Value;
+import org.springframework.security.core.GrantedAuthority; // 1. Import this helper
+import org.springframework.security.core.userdetails.UserDetails;
+import org.springframework.stereotype.Service;
+
+import io.jsonwebtoken.Claims;
+import io.jsonwebtoken.Jwts;
+import io.jsonwebtoken.SignatureAlgorithm;
+import io.jsonwebtoken.io.Decoders;
+import io.jsonwebtoken.security.Keys;
 
 @Service
 public class JwtService {
@@ -31,7 +34,15 @@ public class JwtService {
     }
 
     public String generateToken(UserDetails userDetails) {
-        return generateToken(new HashMap<>(), userDetails);
+        // --- THIS IS THE KEY CHANGE ---
+        // We create a map of custom "claims" to add extra information to the token.
+        Map<String, Object> claims = new HashMap<>();
+        // We get the user's roles (e.g., "ROLE_ADMIN") and add them to the claims map.
+        claims.put("roles", userDetails.getAuthorities().stream()
+                .map(GrantedAuthority::getAuthority)
+                .collect(Collectors.toList()));
+        // ---
+        return generateToken(claims, userDetails);
     }
 
     public String generateToken(
@@ -40,6 +51,7 @@ public class JwtService {
     ) {
         return Jwts
                 .builder()
+                // The extraClaims map (containing our roles) is now included here.
                 .setClaims(extraClaims)
                 .setSubject(userDetails.getUsername())
                 .setIssuedAt(new Date(System.currentTimeMillis()))
@@ -75,3 +87,4 @@ public class JwtService {
         return Keys.hmacShaKeyFor(keyBytes);
     }
 }
+

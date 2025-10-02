@@ -4,7 +4,7 @@ import java.util.List;
 
 public class OrderRequest {
     // CHANGED from Long to Integer to match the Component's ID type
-    private List<Integer> componentIds; 
+    private List<Integer> componentIds;
     private String shippingAddress;
 
     // Getters and Setters
