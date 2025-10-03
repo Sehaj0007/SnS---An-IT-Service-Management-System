@@ -1,14 +1,23 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { Navbar, Nav, Container, NavDropdown, Modal, Button } from 'react-bootstrap';
 import { LinkContainer } from 'react-router-bootstrap';
+// The path is corrected to go up two directories to find the context folder.
 import { useAuth } from '../../context/AuthContext';
 
 const AppNavbar = () => {
     const { user, logout } = useAuth();
     const [showLogoutModal, setShowLogoutModal] = useState(false);
 
-    // 1. This is the new logic to check if the user is an admin
-    const isAdmin = user && user.roles && user.roles.includes('ROLE_ADMIN');
+    // --- DEBUGGING LOG ---
+    // This will print the user object to the browser console whenever it changes.
+    // It will help us see exactly what information the Navbar has.
+    useEffect(() => {
+        console.log("Navbar received user object:", user);
+    }, [user]);
+
+    // --- FINAL FIX ---
+    // We check for 'ROLE_ADMIN' to match the standard format from Spring Security.
+    const isAdmin = user && user.role === 'ROLE_ADMIN';
 
     const handleLogout = () => {
         logout();
@@ -38,7 +47,7 @@ const AppNavbar = () => {
                         <Nav>
                             {user ? (
                                 <NavDropdown title={user.email} id="basic-nav-dropdown" align="end">
-                                    {/* 2. We conditionally render the Admin link here */}
+                                    {/* This link will now correctly appear for admins */}
                                     {isAdmin && (
                                         <LinkContainer to="/admin-dashboard">
                                             <NavDropdown.Item>Admin Dashboard</NavDropdown.Item>
@@ -62,7 +71,7 @@ const AppNavbar = () => {
                 </Container>
             </Navbar>
 
-            {/* Your existing Logout Confirmation Modal remains unchanged */}
+            {/* Logout Confirmation Modal */}
             <Modal show={showLogoutModal} onHide={() => setShowLogoutModal(false)} centered>
                 <Modal.Header closeButton>
                     <Modal.Title>Confirm Logout</Modal.Title>

@@ -22,8 +22,6 @@ import lombok.RequiredArgsConstructor;
 @Configuration
 @EnableWebSecurity
 @RequiredArgsConstructor
-// --- THIS ANNOTATION IS THE FIX ---
-// It enables the @PreAuthorize annotations in your AdminController to work.
 @EnableMethodSecurity
 public class SecurityConfig {
 
@@ -33,20 +31,23 @@ public class SecurityConfig {
     @Bean
     public SecurityFilterChain securityFilterChain(HttpSecurity http) throws Exception {
         http
-            // Use the detailed CORS configuration defined below
-            .cors(cors -> cors.configurationSource(corsConfigurationSource()))
-            .csrf(AbstractHttpConfigurer::disable)
-            .authorizeHttpRequests(auth -> auth
-                // Allow pre-flight OPTIONS requests for CORS
-                .requestMatchers(HttpMethod.OPTIONS, "/**").permitAll()
-                // Your public endpoints
-                .requestMatchers("/api/auth/**", "/api/services/**", "/api/components/**").permitAll()
-                // All other requests must be authenticated
-                .anyRequest().authenticated()
-            )
-            .sessionManagement(session -> session.sessionCreationPolicy(SessionCreationPolicy.STATELESS))
-            .authenticationProvider(authenticationProvider)
-            .addFilterBefore(jwtAuthFilter, UsernamePasswordAuthenticationFilter.class);
+                // Use the detailed CORS configuration defined below
+                .cors(cors -> cors.configurationSource(corsConfigurationSource()))
+                .csrf(AbstractHttpConfigurer::disable)
+                .authorizeHttpRequests(auth -> auth
+                        // Allow pre-flight OPTIONS requests for CORS
+                        .requestMatchers(HttpMethod.OPTIONS, "/**").permitAll()
+                        // Your public endpoints
+                        .requestMatchers("/api/auth/**", "/api/services/**", "/api/components/**").permitAll()
+                        // --- THIS IS THE NEW RULE ---
+                        // Allow any logged-in user to create an appointment.
+                        .requestMatchers(HttpMethod.POST, "/api/appointments").authenticated()
+                        // All other requests must be authenticated
+                        .anyRequest().authenticated()
+                )
+                .sessionManagement(session -> session.sessionCreationPolicy(SessionCreationPolicy.STATELESS))
+                .authenticationProvider(authenticationProvider)
+                .addFilterBefore(jwtAuthFilter, UsernamePasswordAuthenticationFilter.class);
 
         return http.build();
     }
@@ -64,4 +65,3 @@ public class SecurityConfig {
         return source;
     }
 }
-
