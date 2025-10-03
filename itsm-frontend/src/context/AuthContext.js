@@ -5,41 +5,45 @@ import { jwtDecode } from 'jwt-decode';
 const AuthContext = createContext(null);
 
 export const AuthProvider = ({ children }) => {
-    // Initialize token from localStorage to keep user logged in
     const [token, setToken] = useState(() => localStorage.getItem('token'));
     const [user, setUser] = useState(null);
     const [error, setError] = useState('');
     const navigate = useNavigate();
 
-    // Define logout with useCallback to prevent unnecessary re-renders
     const logout = useCallback(() => {
         localStorage.removeItem('token');
         setToken(null);
         setUser(null);
         navigate('/login');
-    }, [navigate]); // navigate is a dependency since it's used in the function
+    }, [navigate]);
 
-    // This useEffect is the key. It runs when the app loads or when the token changes.
+    // This effect runs on initial load or when the token changes in storage
     useEffect(() => {
         if (token) {
             try {
                 const decodedToken = jwtDecode(token);
-                // Check if the token is expired
                 if (decodedToken.exp * 1000 < Date.now()) {
-                    logout(); // If expired, log out the user
+                    logout();
                 } else {
-                    // THE FIX: Set the user state with both email AND roles from the token
-                    setUser({ email: decodedToken.sub, roles: decodedToken.roles || [] });
+                    // Safely get the role from the token
+                    const userRole = decodedToken.roles && Array.isArray(decodedToken.roles) && decodedToken.roles.length > 0 
+                        ? decodedToken.roles[0] 
+                        : null;
+                    
+                    setUser({ 
+                        email: decodedToken.sub, 
+                        name: decodedToken.name,
+                        role: userRole
+                    });
                 }
             } catch (e) {
-                console.error("Invalid token:", e);
-                logout(); // If the token is malformed, log out
+                console.error("Failed to decode token on initial load:", e);
+                logout();
             }
         } else {
-            // If there's no token, ensure the user is logged out
             setUser(null);
         }
-    }, [token, logout]); // Now includes logout in dependencies
+    }, [token, logout]);
 
     const login = async (email, password) => {
         setError('');
@@ -57,10 +61,42 @@ export const AuthProvider = ({ children }) => {
 
             const data = await response.json();
             localStorage.setItem('token', data.token);
-            setToken(data.token); // This is the trigger that makes the useEffect run
-            navigate('/');
+            
+            // --- NEW ROBUST FIX WITH DEBUGGING ---
+            const decoded = jwtDecode(data.token);
+            // Print the contents of the token to the browser console for debugging
+            console.log("--- Login Debug ---");
+            console.log("Decoded Token Claims:", decoded);
+
+            // Safely get the role from the token
+            const userRole = decoded.roles && Array.isArray(decoded.roles) && decoded.roles.length > 0 
+                ? decoded.roles[0] 
+                : null;
+
+            const loggedInUser = {
+                email: decoded.sub,
+                name: decoded.name,
+                role: userRole
+            };
+
+            console.log("Setting user state to:", loggedInUser);
+            setUser(loggedInUser); // Set the user object directly and immediately
+
+            // Set the token state to ensure the useEffect can work on page reloads
+            setToken(data.token); 
+
+            // Navigate based on the role we just determined
+            if (loggedInUser.role === 'ADMIN') {
+                console.log("Navigating to Admin Dashboard.");
+                navigate('/admin-dashboard');
+            } else {
+                console.log("Navigating to Home Page.");
+                navigate('/');
+            }
+
         } catch (err) {
             setError(err.message);
+            console.error("Login failed:", err);
         }
     };
 
@@ -72,3 +108,4 @@ export const AuthProvider = ({ children }) => {
 export const useAuth = () => {
     return useContext(AuthContext);
 };
+
