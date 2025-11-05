@@ -35,16 +35,14 @@ public class SecurityConfig {
                 .cors(cors -> cors.configurationSource(corsConfigurationSource()))
                 .csrf(AbstractHttpConfigurer::disable)
                 .authorizeHttpRequests(auth -> auth
-                        // Allow pre-flight OPTIONS requests for CORS
-                        .requestMatchers(HttpMethod.OPTIONS, "/**").permitAll()
-                        // Your public endpoints
-                        .requestMatchers("/api/auth/**", "/api/services/**", "/api/components/**").permitAll()
-                        // --- THIS IS THE NEW RULE ---
-                        // Allow any logged-in user to create an appointment.
-                        .requestMatchers(HttpMethod.POST, "/api/appointments").authenticated()
-                        // All other requests must be authenticated
-                        .anyRequest().authenticated()
-                )
+                	    .requestMatchers(HttpMethod.OPTIONS, "/**").permitAll()
+                	    // Your public endpoints
+                	    .requestMatchers("/api/auth/**", "/api/services/**", "/api/components/**", "/api/contact").permitAll()
+                	    // Allow any logged-in user to create an appointment.
+                	    .requestMatchers(HttpMethod.POST, "/api/appointments").authenticated()
+                	    .anyRequest().authenticated()
+                	)
+
                 .sessionManagement(session -> session.sessionCreationPolicy(SessionCreationPolicy.STATELESS))
                 .authenticationProvider(authenticationProvider)
                 .addFilterBefore(jwtAuthFilter, UsernamePasswordAuthenticationFilter.class);

@@ -1,6 +1,9 @@
 import React from 'react';
 import ReactDOM from 'react-dom/client';
 import 'bootstrap/dist/css/bootstrap.min.css';
+// Import Bootstrap JS bundle so components that rely on data-bs-* attributes (like carousel)
+// work correctly when using Bootstrap's markup.
+import 'bootstrap/dist/js/bootstrap.bundle.min';
 import './index.css';
 import App from './App';
 import { AuthProvider } from './context/AuthContext';
@@ -16,4 +19,3 @@ root.render(
     </Router>
   </React.StrictMode>
 );
-

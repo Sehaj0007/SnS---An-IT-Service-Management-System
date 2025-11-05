@@ -1,0 +1,19 @@
+/* src/App.css */
+
+/* This class provides the semi-transparent white background for content that scrolls over the background image. */
+.content-container {
+  background-color: rgba(255, 255, 255, 0.97);
+  border-radius: 0.5rem;
+  box-shadow: 0 4px 15px rgba(0, 0, 0, 0.08);
+}
+
+/* Specific styles for the "hollow" hero section on the homepage */
+.hero-hollow {
+  height: 85vh; /* Make the hero section almost fill the viewport height */
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  text-align: center;
+  color: white;
+  text-shadow: 0 2px 8px rgba(0, 0, 0, 0.7);
+}

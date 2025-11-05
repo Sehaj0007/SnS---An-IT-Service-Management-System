@@ -1,22 +1,17 @@
 import React, { useState, useEffect } from 'react';
 import { Navbar, Nav, Container, NavDropdown, Modal, Button } from 'react-bootstrap';
 import { LinkContainer } from 'react-router-bootstrap';
-// The path is corrected to go up two directories to find the context folder.
 import { useAuth } from '../../context/AuthContext';
+import { HouseDoor, PcDisplay, InfoCircle, Envelope } from 'react-bootstrap-icons';
 
 const AppNavbar = () => {
     const { user, logout } = useAuth();
     const [showLogoutModal, setShowLogoutModal] = useState(false);
 
-    // --- DEBUGGING LOG ---
-    // This will print the user object to the browser console whenever it changes.
-    // It will help us see exactly what information the Navbar has.
     useEffect(() => {
         console.log("Navbar received user object:", user);
     }, [user]);
 
-    // --- FINAL FIX ---
-    // We check for 'ROLE_ADMIN' to match the standard format from Spring Security.
     const isAdmin = user && user.role === 'ROLE_ADMIN';
 
     const handleLogout = () => {
@@ -26,28 +21,36 @@ const AppNavbar = () => {
 
     return (
         <>
-            <Navbar bg="dark" variant="dark" expand="lg">
+            <Navbar bg="dark" variant="dark" expand="lg" className="shadow-sm">
                 <Container>
+                    {/* Brand name on the far left */}
                     <LinkContainer to="/">
-                        <Navbar.Brand>SnS Solutions</Navbar.Brand>
+                        <Navbar.Brand>System & Solutions</Navbar.Brand>
                     </LinkContainer>
+                    
                     <Navbar.Toggle aria-controls="basic-navbar-nav" />
+                    
                     <Navbar.Collapse id="basic-navbar-nav">
-                        <Nav className="me-auto">
+                        {/* Centered navigation links with icons and added spacing */}
+                        <Nav className="mx-auto">
                             <LinkContainer to="/">
-                                <Nav.Link>Home</Nav.Link>
+                                <Nav.Link className="d-flex align-items-center px-3"><HouseDoor className="me-2" />Home</Nav.Link>
                             </LinkContainer>
                             <LinkContainer to="/custom-pc">
-                                <Nav.Link>Custom PC</Nav.Link>
+                                <Nav.Link className="d-flex align-items-center px-3"><PcDisplay className="me-2" />Custom PC</Nav.Link>
+                            </LinkContainer>
+                            <LinkContainer to="/about">
+                                <Nav.Link className="d-flex align-items-center px-3"><InfoCircle className="me-2" />About Us</Nav.Link>
                             </LinkContainer>
                             <LinkContainer to="/contact">
-                                <Nav.Link>Contact</Nav.Link>
+                                <Nav.Link className="d-flex align-items-center px-3"><Envelope className="me-2" />Contact</Nav.Link>
                             </LinkContainer>
                         </Nav>
-                        <Nav>
+
+                        {/* Auth-related links on the far right */}
+                        <Nav className="align-items-center">
                             {user ? (
                                 <NavDropdown title={user.email} id="basic-nav-dropdown" align="end">
-                                    {/* This link will now correctly appear for admins */}
                                     {isAdmin && (
                                         <LinkContainer to="/admin-dashboard">
                                             <NavDropdown.Item>Admin Dashboard</NavDropdown.Item>
@@ -62,9 +65,16 @@ const AppNavbar = () => {
                                     </NavDropdown.Item>
                                 </NavDropdown>
                             ) : (
-                                <LinkContainer to="/login">
-                                    <Nav.Link>Login</Nav.Link>
-                                </LinkContainer>
+                                <>
+                                    <LinkContainer to="/login">
+                                        <Nav.Link>Login</Nav.Link>
+                                    </LinkContainer>
+                                    <LinkContainer to="/register">
+                                        <Nav.Link as={Button} variant="primary" size="sm" className="ms-2 px-3">
+                                            Sign Up
+                                        </Nav.Link>
+                                    </LinkContainer>
+                                </>
                             )}
                         </Nav>
                     </Navbar.Collapse>

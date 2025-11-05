@@ -45,9 +45,24 @@ public class Component {
     private int stockQuantity;
 
     // --- Enum for ComponentType ---
-    // This defines the allowed values for the component_type field.
+    // Make sure the values match EXACTLY with your MySQL ENUM column!
     public enum ComponentType {
-        CPU, GPU, RAM, Storage, Motherboard, PSU, Case
+        CPU,
+        GPU,
+        RAM,
+        Storage,
+        Motherboard,
+        Power_Supply,
+        Case,
+        Cooler,
+        Monitor,
+        Keyboard,
+        Mouse,
+        Fan,
+        Sound_Card,
+        WiFi_Card,
+        UPS,
+        Other
     }
 
     // --- Getters and Setters ---

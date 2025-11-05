@@ -1,8 +1,3 @@
-// =================================================================
-// Service.java (UPDATED CLASS)
-// We are adding explicit Getters, Setters, and a no-argument constructor
-// to ensure full compatibility with the JPA/Hibernate library.
-// =================================================================
 package com.itsm.itsm_backend.entity;
 
 import java.time.LocalDateTime;
@@ -32,6 +27,9 @@ public class Service {
 
     @Column(name = "image_url")
     private String imageUrl;
+
+    @Column(name = "long_description", columnDefinition = "TEXT")
+    private String longDescription;
 
     @Column(name = "created_at", updatable = false)
     private LocalDateTime createdAt;
@@ -81,6 +79,14 @@ public class Service {
         this.imageUrl = imageUrl;
     }
 
+    public String getLongDescription() {
+        return longDescription;
+    }
+
+    public void setLongDescription(String longDescription) {
+        this.longDescription = longDescription;
+    }
+
     public LocalDateTime getCreatedAt() {
         return createdAt;
     }
@@ -89,16 +95,4 @@ public class Service {
         this.createdAt = createdAt;
     }
 }
-
-
-// =================================================================
-// Component.java (NO CHANGES)
-// =================================================================
-// ... existing Component.java code ...
-
-
-// =================================================================
-// User.java (NO CHANGES)
-// =================================================================
-// ... existing User.java code ...
 
