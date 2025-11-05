@@ -1,0 +1,144 @@
+.auth-container {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    min-height: 85vh; /* A bit more vertical height */
+    padding: 2rem;
+}
+
+/* This is the main card that will hold both panels */
+.auth-card-split {
+    display: flex;
+    width: 100%;
+    max-width: 900px; /* Wider for two panels */
+    min-height: 550px;
+    background-color: white;
+    border-radius: 20px;
+    box-shadow: 0 10px 40px rgba(0, 0, 0, 0.2);
+    overflow: hidden; /* Important for keeping rounded corners */
+    animation: fadeIn 0.5s ease-out;
+}
+
+@keyframes fadeIn {
+    from {
+        opacity: 0;
+        transform: scale(0.98);
+    }
+    to {
+        opacity: 1;
+        transform: scale(1);
+    }
+}
+
+
+/* Left panel with branding and dark theme */
+.auth-branding-panel {
+    flex: 1;
+    /* --- THIS IS THE UPDATED LINE --- */
+    background: linear-gradient(to bottom, rgba(14, 22, 39, 0.8), rgba(136, 154, 191, 0.9)), 
+                url('/public/team2.jpg'); 
+    background-size: cover;
+    background-position: center;
+    color: white;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    padding: 2.5rem;
+    text-align: center;
+}
+
+.auth-branding-panel h1 {
+    font-weight: 300;
+    font-size: 2.5rem;
+    margin-bottom: 1rem;
+}
+
+.auth-branding-panel p {
+    font-size: 1.1rem;
+    color: rgba(255, 255, 255, 0.8);
+}
+
+
+/* Right panel with the form */
+.auth-form-panel {
+    flex: 1;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    padding: 3rem;
+    background-color: #f7fafc; /* A very light grey for a soft feel */
+}
+
+.auth-form-panel h2 {
+    color: #2d3748; /* Dark grey text */
+    font-weight: 600;
+    margin-bottom: 2rem;
+    text-align: center;
+}
+
+.auth-form-panel .form-label {
+    color: #4a5568;
+    font-weight: 500;
+}
+
+.auth-form-panel .form-control {
+    background-color: #edf2f7;
+    border: 1px solid #e2e8f0;
+    border-radius: 8px;
+    color: #2d3748;
+    padding: 0.75rem 1rem;
+    transition: border-color 0.2s, box-shadow 0.2s;
+}
+
+.auth-form-panel .form-control:focus {
+    background-color: white;
+    border-color: #4299e1;
+    box-shadow: 0 0 0 3px rgba(66, 153, 225, 0.2);
+    outline: none;
+}
+
+.auth-btn {
+    background: #3182ce;
+    border: none;
+    padding: 0.75rem;
+    border-radius: 8px;
+    font-weight: 600;
+    transition: background-color 0.2s, transform 0.2s;
+}
+
+.auth-btn:hover {
+    background-color: #2b6cb0;
+    transform: translateY(-1px);
+}
+
+.auth-footer {
+    text-align: center;
+    margin-top: 1.5rem;
+    color: #718096;
+}
+
+.auth-footer a {
+    color: #3182ce;
+    text-decoration: none;
+    font-weight: 500;
+}
+
+.auth-footer a:hover {
+    text-decoration: underline;
+}
+
+/* Responsive adjustments for smaller screens */
+@media (max-width: 768px) {
+    .auth-branding-panel {
+        display: none; /* Hide the branding panel on small screens */
+    }
+    .auth-card-split {
+        flex-direction: column;
+        min-height: auto;
+    }
+    .auth-form-panel {
+        border-radius: 20px;
+    }
+}
+

@@ -1,28 +1,48 @@
 import React from 'react';
-import { Container, Card } from 'react-bootstrap';
+import { Card } from 'react-bootstrap';
+import './StaticPage.css'; // Import the new styles
 
 const TermsPage = () => {
     return (
-        <Container className="my-5">
-            <Card>
+        <div className="static-page-container">
+            <Card className="static-page-card">
                 <Card.Body>
-                    <Card.Title as="h2" className="mb-4">Terms and Conditions</Card.Title>
-                    <Card.Subtitle className="mb-3 text-muted">Effective date: September 12, 2025</Card.Subtitle>
+                    <Card.Title as="h1">Terms and Conditions</Card.Title>
+                    <Card.Subtitle className="mb-3 text-muted">
+                        Effective date: October 12, 2025
+                    </Card.Subtitle>
+                    
+                    <div className="static-page-content">
+                        <h3>1. Agreement to Terms</h3>
+                        <p>
+                            By accessing or using our services, you agree to be bound by these Terms and Conditions. 
+                            If you do not agree to all the terms and conditions of this agreement, then you may not 
+                            access the website or use any services. We reserve the right to update, change or replace 
+                            any part of these Terms by posting updates and/or changes to our website.
+                        </p>
 
-                    <p><strong>1. Agreement to Terms</strong></p>
-                    <p>By using our services, you agree to be bound by these Terms. If you do not agree to these Terms, do not use the services. We may modify the Terms at any time, in our sole discretion.</p>
+                        <h3>2. Services Provided</h3>
+                        <p>
+                            System & Solutions provides a range of IT services, including but not limited to hardware repair, 
+                            custom PC building, software solutions, and consultancy appointments. All services are provided "as is" 
+                            without warranty of any kind, express or implied. We reserve the right to refuse service to anyone 
+                            for any reason at any time.
+                        </p>
 
-                    <p><strong>2. Services</strong></p>
-                    <p>SnS Solutions provides IT services, custom PC building, and consultancy appointments. All services are provided "as is" without warranty of any kind. We reserve the right to refuse service to anyone for any reason at any time.</p>
-
-                    <p><strong>3. Orders and Payments</strong></p>
-                    <p>When you place an order for a custom PC, you agree to provide current, complete, and accurate purchase and account information. You agree to promptly update your account and other information, including your email address and payment method details, so that we can complete your transactions and contact you as needed. All payments are final and non-refundable except as required by law.</p>
-
-                    {/* <p><em>(Note: This is template text and not legal advice. A real terms and conditions document would need to be much more comprehensive.)</em></p> */}
+                        <h3>3. Orders and Payments</h3>
+                        <p>
+                            When you place an order for a custom PC or any other service, you agree to provide current, complete, 
+                            and accurate purchase and account information. You agree to promptly update your account and other 
+                            information so that we can complete your transactions and contact you as needed. All payments are 
+                            considered final and non-refundable except as required by applicable law or as explicitly stated 
+                            in a separate service agreement.
+                        </p>
+                    </div>
                 </Card.Body>
             </Card>
-        </Container>
+        </div>
     );
 };
 
 export default TermsPage;
+

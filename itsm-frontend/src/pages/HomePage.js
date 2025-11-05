@@ -3,44 +3,28 @@ import { Link } from 'react-router-dom';
 import { useAuth } from '../context/AuthContext';
 import ServiceList from '../components/ServiceList';
 import AppointmentForm from '../components/AppointmentForm';
+import { Button, Container } from 'react-bootstrap';
 
 const HomePage = () => {
   const { user } = useAuth();
 
-  // This function decides what to show in the appointment section
-  // based on the user's login status and role.
   const renderAppointmentSection = () => {
-    // --- THIS IS THE FIX ---
-    // Case 1: An Admin is logged in.
-    // The check is updated to 'ROLE_ADMIN' to match the AuthContext.
     if (user && user.role === 'ROLE_ADMIN') {
-      return null; // Nothing is displayed for admins.
+      return null;
     }
-
-    // --- AND THIS IS THE FIX ---
-    // Case 2: A regular USER is logged in.
-    // The check is updated to 'ROLE_USER' to match the AuthContext.
     if (user && user.role === 'ROLE_USER') {
-      return <AppointmentForm />; // The form is displayed for users.
+      return <AppointmentForm />;
     }
-
-    // Case 3: No one is logged in (guest visitor).
-    // We show a message asking them to log in.
     return (
-      <section id="appointment" className="py-12 bg-white">
-        <div className="container mx-auto px-4">
-            <div className="text-center p-8 border-2 border-dashed rounded-lg bg-gray-50">
-                <h2 className="text-3xl font-bold mb-4 text-gray-800">Book a Consultancy Appointment</h2>
-                <p className="text-gray-600 mb-6">
-                    Please log in or create an account to schedule an appointment with our experts.
-                </p>
-                <Link 
-                    to="/login" 
-                    className="bg-blue-600 text-white font-bold py-3 px-6 rounded-lg hover:bg-blue-700 transition duration-300"
-                >
-                    Login or Register to Book
-                </Link>
-            </div>
+      <section id="appointment" className="py-5 mt-5">
+        <div className="text-center p-4">
+          <h2 className="fw-light mb-4">Book a Consultancy Appointment</h2>
+          <p className="text-muted mb-4">
+            Please log in or create an account to schedule an appointment with our experts.
+          </p>
+          <Button as={Link} to="/login" variant="primary" size="lg">
+            Login or Register to Book
+          </Button>
         </div>
       </section>
     );
@@ -48,8 +32,30 @@ const HomePage = () => {
 
   return (
     <div className="homepage">
-      <ServiceList />
-      {renderAppointmentSection()}
+      {/* Hollow Hero Section */}
+      <div className="hero-hollow">
+        <div>
+          <h1 className="display-2 fw-bold">Professional IT Solutions</h1>
+          <p className="lead fs-3">
+            Your one-stop solution for all IT-related problems.
+          </p>
+          {/* --- UPDATED BUTTON STYLE --- */}
+          <Button as={Link} to="/contact" variant="outline-light" size="lg" className="mt-3 px-4 py-2 fw-bold">
+            Get Help Now
+          </Button>
+        </div>
+      </div>
+
+      {/* This new wrapper provides the semi-transparent background for all scrolling content */}
+      <div className="content-container">
+        <Container>
+          <div className="py-4">
+            <h2 className="text-center mb-5 fw-light">Our Services</h2>
+            <ServiceList />
+          </div>
+          {renderAppointmentSection()}
+        </Container>
+      </div>
     </div>
   );
 };
