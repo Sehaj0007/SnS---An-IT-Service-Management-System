@@ -1,15 +1,19 @@
 package com.itsm.itsm_backend.controller;
 
-import com.itsm.itsm_backend.dto.ContactMessageDto;
-import com.itsm.itsm_backend.entity.ContactMessage;
-import com.itsm.itsm_backend.repository.ContactMessageRepository;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.ResponseEntity;
 // For sending email:
 import org.springframework.mail.SimpleMailMessage;
 import org.springframework.mail.javamail.JavaMailSender;
+import org.springframework.web.bind.annotation.CrossOrigin;
+import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestBody;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RestController;
 
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.*;
+import com.itsm.itsm_backend.dto.ContactMessageDto;
+import com.itsm.itsm_backend.entity.ContactMessage;
+import com.itsm.itsm_backend.repository.ContactMessageRepository;
 
 @RestController
 @RequestMapping("/api")

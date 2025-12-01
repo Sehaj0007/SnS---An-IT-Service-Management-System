@@ -6,7 +6,6 @@ import java.util.stream.Stream;
 
 import jakarta.persistence.AttributeConverter;
 import jakarta.persistence.Column;
-import jakarta.persistence.Convert;
 import jakarta.persistence.Converter;
 import jakarta.persistence.Entity;
 import jakarta.persistence.FetchType;
@@ -92,7 +91,7 @@ public class Appointment {
 
     @Column(columnDefinition = "TEXT")
     private String issueDescription;
-    
+
     // --- 3. THE @Enumerated ANNOTATION IS NO LONGER NEEDED ---
     // The @Converter will handle everything automatically.
     @Column(nullable = false)

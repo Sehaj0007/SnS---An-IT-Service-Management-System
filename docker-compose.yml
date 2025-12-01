@@ -1,0 +1,57 @@
+version: "3.8"
+
+services:
+  mysql:
+    image: mysql:8.0
+    container_name: itsm_mysql
+    restart: unless-stopped
+    environment:
+      MYSQL_ROOT_PASSWORD: rootpassword
+      MYSQL_DATABASE: itsm_db
+      MYSQL_USER: itsm
+      MYSQL_PASSWORD: itsm_pass
+    volumes:
+      - mysql-data:/var/lib/mysql
+    ports:
+      - "3306:3306"
+
+  backend:
+    build:
+      context: ./itsm-backend
+      dockerfile: Dockerfile
+    container_name: itsm_backend
+    depends_on:
+      - mysql
+    environment:
+      SPRING_DATASOURCE_URL: jdbc:mysql://mysql:3306/itsm_db?useSSL=false&allowPublicKeyRetrieval=true&serverTimezone=UTC
+      SPRING_DATASOURCE_USERNAME: itsm
+      SPRING_DATASOURCE_PASSWORD: itsm_pass
+      SPRING_JPA_HIBERNATE_DDL_AUTO: update
+      SPRING_PROFILES_ACTIVE: docker
+      # Optionally add JWT secret or other envs:
+      # JWT_SECRET: yourjwtsecret
+    ports:
+      - "8081:8081"
+    restart: unless-stopped
+    networks:
+      - itsm-net
+
+  frontend:
+    build:
+      context: ./itsm-frontend
+      dockerfile: Dockerfile
+    container_name: itsm_frontend
+    depends_on:
+      - backend
+    ports:
+      - "3000:80"   # maps nginx:80 -> host:3000
+    restart: unless-stopped
+    networks:
+      - itsm-net
+
+volumes:
+  mysql-data:
+
+networks:
+  itsm-net:
+    driver: bridge
