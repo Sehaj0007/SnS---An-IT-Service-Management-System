@@ -2,7 +2,7 @@ import React, { useState, useEffect } from 'react';
 import { Navbar, Nav, Container, NavDropdown, Modal, Button } from 'react-bootstrap';
 import { LinkContainer } from 'react-router-bootstrap';
 import { useAuth } from '../../context/AuthContext';
-import { HouseDoor, PcDisplay, InfoCircle, Envelope } from 'react-bootstrap-icons';
+import { HouseDoor, PcDisplay, InfoCircle, Envelope, Tools } from 'react-bootstrap-icons';
 
 const AppNavbar = () => {
     const { user, logout } = useAuth();
@@ -38,6 +38,9 @@ const AppNavbar = () => {
                             </LinkContainer>
                             <LinkContainer to="/custom-pc">
                                 <Nav.Link className="d-flex align-items-center px-3"><PcDisplay className="me-2" />Custom PC</Nav.Link>
+                            </LinkContainer>
+                            <LinkContainer to="/services">
+                                <Nav.Link className="d-flex align-items-center px-3"><Tools className="me-2" />Services</Nav.Link>
                             </LinkContainer>
                             <LinkContainer to="/about">
                                 <Nav.Link className="d-flex align-items-center px-3"><InfoCircle className="me-2" />About Us</Nav.Link>

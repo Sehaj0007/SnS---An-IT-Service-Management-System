@@ -14,6 +14,7 @@ import RegisterPage from './pages/RegisterPage';
 import AdminDashboardPage from './pages/AdminDashboardPage';
 import AdminRoute from './components/AdminRoute';
 import AboutPage from './pages/AboutPage';
+import ServiceCatalogPage from './pages/ServiceCatalogPage';
 
 // Import the main CSS file for App-wide styles
 import './App.css';
@@ -28,6 +29,7 @@ function App() {
     '/register',
     '/contact',
     '/about',
+    '/services',
     '/custom-pc'
   ];
 
@@ -47,6 +49,7 @@ function App() {
             <Route path="/my-orders" element={<OrderHistoryPage />} />
             <Route path="/contact" element={<ContactPage />} />
             <Route path="/about" element={<AboutPage />} />
+            <Route path="/services" element={<ServiceCatalogPage />} />
             <Route path="/privacy-policy" element={<PrivacyPolicyPage />} />
             <Route path="/terms-of-service" element={<TermsPage />} />
             <Route
